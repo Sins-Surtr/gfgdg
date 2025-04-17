@@ -1,6 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
+//git commit -m "first commit"
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,24 +10,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Todo {
-  id        String   @id @default(uuid())
-  title     String
-  done      Boolean
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Giutar {
-  id        String   @id @default(uuid())
-  name      String
-  brand     String
-  priece    Float
-}
 
 model User {
-  id        Int   @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String 
+  id    String   @id @default(uuid())
+  email String   @unique
+  name  String
+  role  Role
+  password String
+
+  @@map("users")
+}
+
+model Book {
+  id         String   @id
+  title      String
+  authors    String   // จะเก็บเป็น string รวม เช่น "Author1, Author2"
+  publisher  String
+  thumbnail  String
+
+  @@map("books")
+}
+
+enum Role {
+  CLIENT
+  DEVELOPER
 }
