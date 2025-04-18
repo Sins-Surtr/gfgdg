@@ -22,7 +22,7 @@ model User {
 }
 
 model Book {
-  id         String   @id
+  id         String   @id @unique  
   title      String
   authors    String   // จะเก็บเป็น string รวม เช่น "Author1, Author2"
   publisher  String
