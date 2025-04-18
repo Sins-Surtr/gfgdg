@@ -1,27 +1,20 @@
-// app/developer/actios/Addbook.tsx
+'use server'
 
-import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/utils/db";
+import { prisma } from "@/lib/prisma"
 
-export async function POST(req: NextRequest) {
-  const body = await req.json();
-
-  const { id, title, authors, publisher, thumbnail } = body;
-
-  const exists = await prisma.book.findUnique({ where: { id } });
-  if (exists) {
-    return NextResponse.json({ message: "Book already added." }, { status: 400 });
+export async function addBook(bookData: {
+  id: string
+  title: string
+  authors: string
+  publisher: string
+  thumbnail: string
+}) {
+  try {
+    await prisma.book.create({
+      data: bookData
+    })
+  } catch (error) {
+    console.error("Error adding book:", error)
+    throw error
   }
-
-  await prisma.book.create({
-    data: {
-      id,
-      title,
-      authors,
-      publisher,
-      thumbnail,
-    },
-  });
-
-  return NextResponse.json({ message: "Book added to database!" });
 }
