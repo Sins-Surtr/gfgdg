@@ -1,3 +1,2 @@
-const STYLE='border-2 border-black m-2 p-2'
-
-export default STYLE
+const STYLE = "w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition";
+export default STYLE;

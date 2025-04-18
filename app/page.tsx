@@ -1,41 +1,28 @@
-import Image from "next/image";
-import Header from "@/component/Header";
-import Footer from "@/component/Footer";
-import { Main } from "next/document";
-import Link from "next/link";
+import { login } from './Developer/actions/login'
 
-export default function Home() {
-  return (
-    <>
-      <main className="h-[85vh]">
-        <h1 className="text-2xl">
-          hello world
-        </h1>
+const LoginPage = () => {
+    const handleLogin = async (event: React.FormEvent) => {
+        event.preventDefault()
 
-        <div className="flex justify-between">
-          <Image src="./next.svg" width={200} height={200} alt="next" />
+        const formData = new FormData(event.target as HTMLFormElement)
 
+        const { error, message, role } = await login(formData)
 
-        </div>
+        if (error) {
+            // แจ้งข้อผิดพลาด
+            console.log("Error:", error)
+        } else {
+            // หากล็อกอินสำเร็จ
+            console.log("Logged in as", role)
+            // เพิ่มการเปลี่ยนหน้าไปยังหน้าอื่นตาม role (เช่นไปยังหน้า Developer หรือ Client)
+        }
+    }
 
-
-        <p className="bg-red-400 rounded-lg p-5 mt-5 
-        border-2 shadow-lg border-red-900">
-          Lorem ipsum dolor sit amet
-          consectetur adipisicing elit.
-          Incidunt, dolores.
-        </p>
-        <p className="bg-red-400 rounded-lg p-5 mt-5 
-        border-2 shadow-lg border-red-900">
-          Lorem ipsum dolor sit amet
-          consectetur adipisicing elit.
-          Incidunt, dolores.
-        </p>
-
-        <Link href="/cat" className="hover:underline ml-2">CAT</Link>
-        <Link href="/dog" className="hover:underline ml-4">DOG</Link>
-        <Link href="/cal" className="hover:underline ml-4">Calculator</Link>
-      </main>
-    </>
-  );
+    return (
+        <form onSubmit={handleLogin}>
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="password" name="password" placeholder="Password" required />
+            <button type="submit">Login</button>
+        </form>
+    )
 }
