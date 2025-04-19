@@ -12,23 +12,35 @@ datasource db {
 
 
 model User {
-  id    String   @id @default(uuid())
-  email String   @unique
-  name  String
-  role  Role
+  id       String    @id @default(uuid()) // ใช้ String สำหรับ id
+  email    String    @unique
+  name     String
+  role     Role
   password String
+  books    Bookshelf[] // เชื่อมโยงกับ Bookshelf
 
   @@map("users")
 }
 
 model Book {
-  id         String   @id @unique  
+  id         String    @id @unique // ใช้ String สำหรับ id
   title      String
-  authors    String   // จะเก็บเป็น string รวม เช่น "Author1, Author2"
+  authors    String
   publisher  String
   thumbnail  String
+  bookshelves Bookshelf[] // เชื่อมโยงกับ Bookshelf
 
   @@map("books")
+}
+
+model Bookshelf {
+  id      Int     @id @default(autoincrement()) // ใช้ Int สำหรับ Bookshelf id
+  userId  String  // เปลี่ยนเป็น String เพราะ userId เชื่อมกับ User id (String)
+  bookId  String  // เปลี่ยนเป็น String เพราะ bookId เชื่อมกับ Book id (String)
+  user    User    @relation(fields: [userId], references: [id]) // ความสัมพันธ์กับ User
+  book    Book    @relation(fields: [bookId], references: [id]) // ความสัมพันธ์กับ Book
+
+  @@unique([userId, bookId]) // ทำให้การมีหนังสือในชั้นหนังสือเป็นเอกลักษณ์
 }
 
 enum Role {

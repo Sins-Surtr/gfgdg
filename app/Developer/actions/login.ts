@@ -2,6 +2,7 @@
 
 import {prisma} from '@/lib/prisma'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 
 export async function login(_: any, formData: FormData) {
   const email = formData.get('email') as string
