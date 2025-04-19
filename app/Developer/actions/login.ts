@@ -20,6 +20,6 @@ export async function login(_: any, formData: FormData) {
   if (user.role === 'DEVELOPER') {
     redirect('/Developer')
   } else {
-    redirect('/Home')
+    redirect('/HomePage')
   }
 }
