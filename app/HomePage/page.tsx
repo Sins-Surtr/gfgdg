@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 import Header from '@/component/็Header'
 import Footer from '@/component/Footer'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 interface Book {
   id: string
@@ -23,7 +23,6 @@ export default function HomePage() {
     const fetchBooks = async () => {
       try {
         const res = await fetch('/api/books')
-        if (!res.ok) throw new Error('Failed to fetch books')
         const data = await res.json()
         setBooks(data)
       } catch (error) {
@@ -34,31 +33,33 @@ export default function HomePage() {
     fetchBooks()
   }, [])
 
-  const addToBookshelf = (book: Book) => {
-    if (bookshelf.some((b) => b.id === book.id)) {
-      toast.error('หนังสือเล่มนี้อยู่ในชั้นหนังสือแล้ว')
+  const handleAddBook = (book: Book) => {
+    const alreadyInShelf = bookshelf.find((b) => b.id === book.id)
+    if (alreadyInShelf) {
+      toast.warning('หนังสือถูกเพิ่มไว้แล้ว')
       return
     }
 
-    setBookshelf((prev) => [...prev, book])
-    toast.success('เพิ่มสำเร็จ')
+    setBookshelf([...bookshelf, book])
+    toast.success('เพิ่มเข้าชั้นหนังสือแล้ว!')
   }
 
-  const removeFromBookshelf = (bookId: string) => {
-    setBookshelf((prev) => prev.filter((b) => b.id !== bookId))
-    toast.success('ลบหนังสือออกจากชั้นหนังสือแล้ว')
+  const handleRemoveBook = (id: string) => {
+    const updatedShelf = bookshelf.filter((book) => book.id !== id)
+    setBookshelf(updatedShelf)
+    toast.info('ลบหนังสือแล้ว')
   }
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
-
       <ToastContainer />
 
-      <div className="p-6">
+      <div className="flex-grow p-6">
+        {/* Book List */}
         {activeTab === 'booklist' && (
           <div>
-            <h2 className="text-xl font-bold mb-4">รายการหนังสือ</h2>
+            <h1 className="text-2xl font-bold mb-4">รายการหนังสือ</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {books.map((book) => (
                 <div key={book.id} className="border rounded shadow p-4 flex gap-4">
@@ -68,12 +69,12 @@ export default function HomePage() {
                     className="w-24 h-32 object-cover rounded"
                   />
                   <div>
-                    <h3 className="font-semibold text-lg">{book.title}</h3>
+                    <h2 className="font-semibold text-lg">{book.title}</h2>
                     <p>ผู้แต่ง: {book.authors}</p>
                     <p>สำนักพิมพ์: {book.publisher}</p>
                     <button
-                      onClick={() => addToBookshelf(book)}
                       className="mt-2 px-3 py-1 bg-green-500 text-white rounded"
+                      onClick={() => handleAddBook(book)}
                     >
                       เพิ่มเข้าชั้นหนังสือ
                     </button>
@@ -84,9 +85,10 @@ export default function HomePage() {
           </div>
         )}
 
+        {/* Bookshelf */}
         {activeTab === 'bookshelf' && (
           <div>
-            <h2 className="text-xl font-bold mb-4">ชั้นหนังสือของคุณ</h2>
+            <h1 className="text-2xl font-bold mb-4">ชั้นหนังสือของคุณ</h1>
             {bookshelf.length === 0 ? (
               <p className="text-gray-500">ยังไม่มีหนังสือในชั้นหนังสือ</p>
             ) : (
@@ -98,15 +100,15 @@ export default function HomePage() {
                       alt={book.title}
                       className="w-24 h-32 object-cover rounded"
                     />
-                    <div>
-                      <h3 className="font-semibold text-lg">{book.title}</h3>
+                    <div className="flex-1">
+                      <h2 className="font-semibold text-lg">{book.title}</h2>
                       <p>ผู้แต่ง: {book.authors}</p>
                       <p>สำนักพิมพ์: {book.publisher}</p>
                       <button
-                        onClick={() => removeFromBookshelf(book.id)}
                         className="mt-2 px-3 py-1 bg-red-500 text-white rounded"
+                        onClick={() => handleRemoveBook(book.id)}
                       >
-                        ลบออกจากชั้นหนังสือ
+                        ลบ
                       </button>
                     </div>
                   </div>
@@ -116,6 +118,7 @@ export default function HomePage() {
           </div>
         )}
       </div>
+
       <Footer />
     </div>
   )
