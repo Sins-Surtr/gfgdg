@@ -2,12 +2,13 @@
 
 import Link from 'next/link'
 import { useFormState } from 'react-dom'
+import { useActionState } from 'react';
 import { login } from './Developer/actions/login'
 
 const initialState = { error: '', message: '' }
 
 export default function LoginPage() {
-  const [state, formAction] = useFormState(login, initialState)
+  const [state, formAction] = useActionState(login, initialState);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

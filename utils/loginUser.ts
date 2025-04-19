@@ -53,21 +53,7 @@ export async function loginUser(userInput: UserInput, remember: boolean) {
 }
 
 
-export async function logoutUser() {
-    // Destroy the session
-    // cookies().set("session", "", { expires: new Date(0) });
-    try {
-        console.log("=== before logout ===");
-        (await cookies()).delete('session')
-        console.log("=== after delete logout ===");
-    }
-    catch(e) {
-        console.log("Error: ", e)   
-        return { message: "" }
-    }
-   
-    return { message: "Logout Success" }
-}
+
 
 
 export async function getSession() {
