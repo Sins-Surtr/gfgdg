@@ -1,28 +1,21 @@
+'use client'
+
+import { useFormState } from 'react-dom'
 import { login } from './Developer/actions/login'
 
-const LoginPage = () => {
-    const handleLogin = async (event: React.FormEvent) => {
-        event.preventDefault()
+const initialState = { error: '', message: '' }
 
-        const formData = new FormData(event.target as HTMLFormElement)
+export default function LoginPage() {
+  const [state, formAction] = useFormState(login, initialState)
 
-        const { error, message, role } = await login(formData)
+  return (
+    <form action={formAction} className="flex flex-col space-y-4 max-w-sm mx-auto mt-10">
+      <input name="email" type="email" placeholder="Email" required className="border p-2" />
+      <input name="password" type="password" placeholder="Password" required className="border p-2" />
+      <button type="submit" className="bg-blue-500 text-white py-2">Login</button>
 
-        if (error) {
-            // แจ้งข้อผิดพลาด
-            console.log("Error:", error)
-        } else {
-            // หากล็อกอินสำเร็จ
-            console.log("Logged in as", role)
-            // เพิ่มการเปลี่ยนหน้าไปยังหน้าอื่นตาม role (เช่นไปยังหน้า Developer หรือ Client)
-        }
-    }
-
-    return (
-        <form onSubmit={handleLogin}>
-            <input type="email" name="email" placeholder="Email" required />
-            <input type="password" name="password" placeholder="Password" required />
-            <button type="submit">Login</button>
-        </form>
-    )
+      {state.error && <p className="text-red-500">{state.error}</p>}
+    </form>
+  )
 }
+ 

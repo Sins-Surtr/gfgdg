@@ -1,28 +1,21 @@
+'use client'
+
+import { useFormState } from 'react-dom'
 import { registerUser } from '../Developer/actions/registerUser'
 
-const RegisterPage = () => {
-    const handleRegister = async (event: React.FormEvent) => {
-        event.preventDefault()
+const initialState = { error: '', message: '' }
 
-        const formData = new FormData(event.target as HTMLFormElement)
+export default function RegisterPage() {
+  const [state, formAction] = useFormState(registerUser, initialState)
 
-        const newUser = await registerUser(formData)
+  return (
+    <form action={formAction} className="flex flex-col space-y-4 max-w-sm mx-auto mt-10">
+      <input name="email" type="email" placeholder="Email" required className="border p-2" />
+      <input name="password" type="password" placeholder="Password" required className="border p-2" />
+      <button type="submit" className="bg-blue-500 text-white py-2">Register</button>
 
-        if (newUser) {
-            // ลงทะเบียนสำเร็จ
-            console.log("User registered:", newUser)
-        } else {
-            // แจ้งข้อผิดพลาด
-            console.log("Registration failed")
-        }
-    }
-
-    return (
-        <form onSubmit={handleRegister}>
-            <input type="text" name="name" placeholder="Name" required />
-            <input type="email" name="email" placeholder="Email" required />
-            <input type="password" name="password" placeholder="Password" required />
-            <button type="submit">Register</button>
-        </form>
-    )
+      {state.error && <p className="text-red-500">{state.error}</p>}
+      {state.message && <p className="text-green-500">{state.message}</p>}
+    </form>
+  )
 }

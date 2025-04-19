@@ -1,37 +1,25 @@
-import bcrypt from 'bcryptjs'
-import { prisma } from '@/lib/prisma'
+'use server'
 
-export async function login(formData: FormData) {
-    const email = formData.get("email") as string
-    const password = formData.get("password") as string
+import {prisma} from '@/lib/prisma'
+import { redirect } from 'next/navigation'
 
-    // ค้นหาผู้ใช้จาก email
-    const user = await prisma.user.findFirst({
-        where: { email }
-    })
+export async function login(_: any, formData: FormData) {
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
 
-    // ตรวจสอบว่าไม่พบผู้ใช้
-    if (!user) {
-        return {
-            error: "User not found",
-            message: ""
-        }
-    }
+  if (!email || !password) {
+    return { error: 'Missing email or password', message: '' }
+  }
 
-    // เปรียบเทียบรหัสผ่านที่กรอกกับรหัสที่เก็บในฐานข้อมูล
-    const isPasswordValid = await bcrypt.compare(password, user.password)
+  const user = await prisma.user.findUnique({ where: { email } })
+  if (!user || user.password !== password) {
+    return { error: 'Incorrect email or password', message: '' }
+  }
 
-    if (!isPasswordValid) {
-        return {
-            error: "Invalid password",
-            message: ""
-        }
-    }
-
-    // คืนค่า role ของผู้ใช้
-    return {
-        error: "",
-        message: "User logged in successfully",
-        role: user.role
-    }
+  // redirect ตาม role
+  if (user.role === 'DEVELOPER') {
+    redirect('/Developer')
+  } else {
+    redirect('/Home')
+  }
 }

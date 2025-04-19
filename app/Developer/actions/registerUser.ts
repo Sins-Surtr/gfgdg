@@ -1,25 +1,31 @@
-import bcrypt from 'bcryptjs'
-import { prisma } from '@/lib/prisma'
+'use server'
 
-const saltRounds = 10
+import {prisma} from '@/lib/prisma'
+import { Role } from '@prisma/client'
 
-export async function registerUser(formData: FormData) {
-    const email = formData.get("email") as string
-    const password = formData.get("password") as string
-    const name = formData.get("name") as string
+export async function registerUser(_: any, formData: FormData) {
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
 
-    // เข้ารหัสรหัสผ่านก่อนบันทึก
-    const hashedPassword = await bcrypt.hash(password, saltRounds)
+  if (!email || !password) {
+    return { error: 'Missing email or password', message: '' }
+  }
 
-    // บันทึกข้อมูลผู้ใช้ในฐานข้อมูล
-    const newUser = await prisma.user.create({
-        data: {
-            email,
-            name,
-            password: hashedPassword, // เก็บรหัสผ่านที่เข้ารหัสแล้ว
-            role: email.includes('@admin') ? 'DEVELOPER' : 'CLIENT', // กำหนด role
-        }
-    })
+  const existingUser = await prisma.user.findUnique({ where: { email } })
+  if (existingUser) {
+    return { error: 'Email already registered', message: '' }
+  }
 
-    return newUser
+  const role = email.includes('@admin') ? Role.DEVELOPER : Role.CLIENT
+
+  await prisma.user.create({
+    data: {
+      email,
+      password,
+      role,
+      name: '', // ค่า default name (ถ้า schema ต้องการ)
+    },
+  })
+
+  return { error: '', message: 'Registration successful' }
 }
