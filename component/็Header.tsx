@@ -22,13 +22,20 @@ export default function Header({
     <div>
       <header className="bg-blue-600 text-white py-4 shadow-md">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-          <h1 className="text-2xl font-bold">ร้านหนังสือของคนข้างทาง</h1>
-          <button
-            onClick={handleLogout}
-            className="bg-white text-blue-600 px-4 py-2 rounded hover:bg-blue-100 transition mt-2 md:mt-0"
+          <h1
+            onClick={() => router.push('/HomePage')}
+            className="text-2xl font-bold cursor-pointer hover:underline"
           >
-            Logout
-          </button>
+            ร้านหนังสือของคนข้างทาง
+          </h1>
+          <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+            <button
+              className="bg-red-500 text-white px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base rounded hover:bg-red-600 transition"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </header>
 

@@ -1,14 +1,37 @@
+'use client'
+
 import Header from "@/component/็Header"
+import { logoutAction } from '@/app/Developer/actions/logoutAction'
+import { useRouter } from 'next/navigation'
 
 export default function TeamPage() {
+    const router = useRouter()
+
+    const handleLogout = async () => {
+        await logoutAction()
+        router.push('/') // กลับหน้าแรก หรือจะ redirect ไป login page ก็ได้
+    }
     return (
         <div>
-            <header className="bg-blue-600 text-white py-4 shadow-md ">
+            <header className="bg-blue-600 text-white py-4 shadow-md">
                 <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-                    <h1 className="text-2xl font-bold">ร้านหนังสือของคนข้างทาง</h1>
+                    <h1
+                        onClick={() => router.push('/HomePage')}
+                        className="text-2xl font-bold cursor-pointer hover:underline"
+                    >
+                        ร้านหนังสือของคนข้างทาง
+                    </h1>
+                    <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+                        <button
+                            className="bg-red-500 text-white px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base rounded hover:bg-red-600 transition"
+                            onClick={handleLogout}
+                        >
+                            Logout
+                        </button>
+                    </div>
                 </div>
             </header>
-            
+
             <div className="max-w-2xl mx-auto mt-12 px-4">
                 <h1 className="text-3xl font-bold mb-6 text-blue-600 text-center">
                     ทีมผู้พัฒนา (Team Service)

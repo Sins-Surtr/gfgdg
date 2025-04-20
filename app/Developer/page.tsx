@@ -43,15 +43,17 @@ export default function DeveloperPage() {
         <h1 className="text-2xl font-bold mb-4">Google Books + Add to Database</h1>
         <GoogleBookList books={googleBooks} addBookToDB={addBookToDB} />
 
-        
+        <h2 className="text-xl font-bold mt-8 mb-4">รายชื่อหนังสือในฐานข้อมูล</h2>
         <ul className="space-y-3">
           {dbBooks.map((book) => (
-            <li key={book.id} className="border rounded p-3 bg-white shadow">
-              <p><strong>Title:</strong> {book.title}</p>
-              <p><strong>Authors:</strong> {book.authors}</p>
-              <p><strong>Publisher:</strong> {book.publisher}</p>
-              <p><strong>Thumbnail:</strong> {book.thumbnail}</p>
-            </li>
+            
+              <li key={book.id} className="border rounded p-3 bg-white shadow">
+                <p><strong>Title:</strong> {book.title}</p>
+                <p><strong>Authors:</strong> {book.authors}</p>
+                <p><strong>Publisher:</strong> {book.publisher}</p>
+                <p><strong>Thumbnail:</strong> {book.thumbnail}</p>
+              </li>
+            
           ))}
         </ul>
       </div>

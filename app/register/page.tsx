@@ -1,13 +1,15 @@
 'use client'
 
 import { useFormState } from 'react-dom'
+import { useActionState } from 'react'
 import { registerUser } from '../Developer/actions/registerUser'
 import Link from 'next/link'
 
 const initialState = { error: '', message: '' }
 
 export default function RegisterPage() {
-  const [state, formAction] = useFormState(registerUser, initialState)
+  const [state, formAction] = useActionState(registerUser, initialState)
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
