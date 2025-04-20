@@ -17,7 +17,7 @@ model User {
   name     String
   role     Role
   password String
-  books    Bookshelf[] // เชื่อมโยงกับ Bookshelf
+
 
   @@map("users")
 }
@@ -28,20 +28,12 @@ model Book {
   authors    String
   publisher  String
   thumbnail  String
-  bookshelves Bookshelf[] // เชื่อมโยงกับ Bookshelf
+
 
   @@map("books")
 }
 
-model Bookshelf {
-  id      Int     @id @default(autoincrement()) // ใช้ Int สำหรับ Bookshelf id
-  userId  String  // เปลี่ยนเป็น String เพราะ userId เชื่อมกับ User id (String)
-  bookId  String  // เปลี่ยนเป็น String เพราะ bookId เชื่อมกับ Book id (String)
-  user    User    @relation(fields: [userId], references: [id]) // ความสัมพันธ์กับ User
-  book    Book    @relation(fields: [bookId], references: [id]) // ความสัมพันธ์กับ Book
 
-  @@unique([userId, bookId]) // ทำให้การมีหนังสือในชั้นหนังสือเป็นเอกลักษณ์
-}
 
 enum Role {
   CLIENT
